@@ -1,0 +1,11 @@
+#GO 
+server/tmp/
+server.*.exe
+
+#Node
+client/node_modules/
+client/dist
+
+#env
+.env
+.env.local
