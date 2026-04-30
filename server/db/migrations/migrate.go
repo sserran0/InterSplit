@@ -10,7 +10,7 @@ func runMigrations(db *sql.DB) error {
 	for _, f := range files {
 		name := filepath.Base(f)
 		var exists bool
-		db.QueryRow("SELECT EXISTS(SELECT 1 FROM migrations_run WHERE filename=$1)", name.Scan(&exists),
+		db.QueryRow("SELECT EXISTS(SELECT 1 FROM migrations_run WHERE filename=$1)", name).Scan(&exists),
 	if exists { continue }
 	content, _ := os.ReadFile(f)
 	db.Exec(string(content))
