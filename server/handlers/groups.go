@@ -53,7 +53,7 @@ func handleCreateGroup(db *sql.DB) http.HandlerFunc {
 
 		var groupID string
 		db.QueryRow(
-			"INSERT INTO groups (name, created_by) VALUES ($1, $2), RETURNING id", req.Name, req.userID,
+			"INSERT INTO groups (name, created_by) VALUES ($1, $2) RETURNING id", req.Name, userID,
 		).Scan(&groupID)
 
 		db.Exec(
@@ -65,4 +65,17 @@ func handleCreateGroup(db *sql.DB) http.HandlerFunc {
 		json.NewEncoder(w).Encode(map[string]string{"id": groupID})
 	}
 
+}
+//Join Group
+func handleJoinGroup(db *sql.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request){
+		userID := r.Context().Value("userID").(string)
+		groupID := chi.URLParam(r, "id")
+
+		db.Exec(
+		"INSERT INTO group_members (group_id, user_id) VALUES ($1, $2) ON CONFLICT DO NOTHING",
+		groupID, userID,
+		)
+		w.WriteHeader(http.StatusOK)
+	}
 }
