@@ -1,6 +1,6 @@
 #GO 
 server/tmp/
-server.*.exe
+server/*.exe
 
 #Node
 client/node_modules/
@@ -9,3 +9,5 @@ client/dist
 #env
 .env
 .env.local
+
+.DS_store

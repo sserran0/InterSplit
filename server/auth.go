@@ -72,7 +72,7 @@ func handleRegister(db *sql.DB) http.HandlerFunc{
 		).Scan(&userID)
 		if err != nil {
 			log.Printf("Register error: %v", err)
-			http.Error(w, "email already exists", 400)
+			http.Error(w, "ERROR!", 400)
 			return
 		}
 		token, _ := generateToken(userID)
