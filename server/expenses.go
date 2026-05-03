@@ -39,7 +39,7 @@ func handleCreateExpense(db *sql.DB) http.HandlerFunc {
 		for _, memberID := range req.MemberIDs{
 			tx.Exec(
 				"INSERT INTO expense_splits (expense_id, user_id, share_amount) VALUES ($1, $2, $3)",
-				expID, memberID, Amount,
+				expID, memberID, shareAmount,
 			)
 		}
 
@@ -87,7 +87,7 @@ func handleGetExpenses(db *sql.DB) http.HandlerFunc {
 			rows.Scan(&expID, &amount, &currency, &description, &paidBy, &splitUserID, &shareAmount, &isSettled)
 			if _, ok := expenseMap[expID]; !ok {
 				expenseMap[expID] = &Expense{
-					ID: expID, Amount: sharedAmount, Currency: currency,
+					ID: expID, Amount: shareAmount, Currency: currency,
 					Description: description, PaidBy: paidBy,
 				}
 				order = append(order, expID)

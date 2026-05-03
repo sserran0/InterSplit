@@ -34,5 +34,6 @@ func main() {
         })
     })
 	port := os.Getenv("PORT")
+	log.Printf("Server running on port %s", port)
     http.ListenAndServe(":"+port, r)
 }

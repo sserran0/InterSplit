@@ -22,7 +22,7 @@ func refreshRates(db *sql.DB) error {
 	defer resp.Body.Close()
 
 	var result frankfurterResponse 
-	json.NewDecoder(resp,Body).Decode(&result)
+	json.NewDecoder(resp.Body).Decode(&result)
 
 	for target, rate := range result.Rates {
 		db.Exec (
