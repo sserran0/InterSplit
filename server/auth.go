@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strings"
 	"unicode/utf8"
+	"log"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -70,6 +71,7 @@ func handleRegister(db *sql.DB) http.HandlerFunc{
 			req.Email, req.Name, string(hash), req.PreferredCurrency,
 		).Scan(&userID)
 		if err != nil {
+			log.Printf("Register error: %v", err)
 			http.Error(w, "email already exists", 400)
 			return
 		}

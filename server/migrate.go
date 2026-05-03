@@ -14,7 +14,8 @@ func runMigrations(db *sql.DB) error {
 	)`)
 
 
-	files, _ := filepath.Glob("db/migrations/*.sql")
+	files, _ := filepath.Glob("migrations/*.sql")
+	log.Printf("Found migration files: %v", files)
 	sort.Strings(files)
 
 	for _, f := range files {
@@ -28,6 +29,12 @@ func runMigrations(db *sql.DB) error {
 			continue
 		}
 		content, _ := os.ReadFile(f)
+		result, err := db.Exec(string(content))
+		if err != nil {
+			log.Printf("Migration error in %s: %v", name, err)
+			continue
+		}
+log.Printf("Applied migration: %s, result: %v", name, result)
 		db.Exec(string(content))
 		db.Exec("INSERT INTO migrations_run (filename) VALUES ($1)", name)
 		log.Printf("Applied migration: %s", name)

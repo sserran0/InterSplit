@@ -6,8 +6,8 @@ CREATE TABLE groups (
 );
 
 CREATE TABLE group_members (
-    group_ud UUID REFERENCES groups(id) ON DELETE CASCADE, 
+    group_id UUID REFERENCES groups(id) ON DELETE CASCADE, 
     user_id UUID REFERENCES users(id) ON DELETE CASCADE, --deletes rows of members for group deletion 
     joined_at TIMESTAMPTZ DEFAULT NOW(),
-    RIMARY KEY (group_id, user_id)
+    PRIMARY KEY (group_id, user_id)
 );

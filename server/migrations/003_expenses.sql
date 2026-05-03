@@ -7,11 +7,11 @@ CREATE TABLE expenses (
     description TEXT,
     expense_date DATE NOT NULL DEFAULT CURRENT_DATE,
     split_type TEXT NOT NULL DEFAULT 'equal',
-    created_at TIMESTAMPTZ DEFAULT NOW(),
+    created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 CREATE TABLE expense_splits (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid,
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     expense_id UUID REFERENCES expenses(id) ON DELETE CASCADE,
     user_id UUID REFERENCES users(id),
     share_amount NUMERIC(15,4) NOT NULL, --IN SOURCE CURRENCY
