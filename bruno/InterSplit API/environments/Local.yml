@@ -1,0 +1,14 @@
+name: Local
+variables:
+  - name: baseURL
+    value: http://localhost:8080/api
+  - secret: true
+    name: token
+  - name: fredID
+    value: 697cb60a-e385-4a13-a47d-d7c8333fe878
+  - name: shaggyID
+    value: cf0ba60b-4727-48b2-aaff-4d5436a5e05b
+  - name: velmaID
+    value: d2c65b33-2ed0-46e5-9a58-f5be1e5d45ae
+  - name: groupID
+    value: 605c7ee7-eaeb-426b-925e-f20e4efc46db

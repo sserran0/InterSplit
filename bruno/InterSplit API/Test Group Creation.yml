@@ -1,0 +1,23 @@
+info:
+  name: Test Group Creation
+  type: http
+  seq: 3
+
+http:
+  method: POST
+  url: "{{baseURL}}/groups"
+  body:
+    type: json
+    data: |-
+      {
+        "name": "Seoul Trip"
+      }
+  auth:
+    type: bearer
+    token: "{{token}}"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

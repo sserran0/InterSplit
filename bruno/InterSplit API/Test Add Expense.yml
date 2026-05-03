@@ -1,0 +1,27 @@
+info:
+  name: Test Add Expense
+  type: http
+  seq: 5
+
+http:
+  method: POST
+  url: "{{baseURL}}/expenses"
+  body:
+    type: json
+    data: |-
+      {
+        "group_id": "{{groupID}}",
+        "amount": 45000,
+        "currency": "KRW",
+        "description": "Dinner in Seoul",
+        "member_ids": ["{{fredID}}", "{{velmaID}}"]
+      }
+  auth:
+    type: bearer
+    token: "{{token}}"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
