@@ -12,6 +12,7 @@ func main() {
 	godotenv.Load()
     db := connectDB()   
     runMigrations(db)
+	startRateRefresher(db)
 
     r := chi.NewRouter()
     r.Use(middleware.Logger)
