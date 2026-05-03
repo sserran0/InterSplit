@@ -6,7 +6,6 @@ import (
 	"os"
 	"strings"
 	"time"
-	"log"
 	"github.com/golang-jwt/jwt/v5"
 )
 
