@@ -6,6 +6,7 @@ import (
 	"os"
 	"strings"
 	"time"
+	"log"
 	"github.com/golang-jwt/jwt/v5"
 )
 
@@ -24,7 +25,7 @@ func jwtMiddleware(next http.Handler) http.Handler{
 		token, err := jwt.Parse(tokenStr, func (token *jwt.Token) (interface{}, error){
 			return []byte(os.Getenv("JWT_SECRET")), nil
 		})
-		if err != nil || token.Valid{
+		if err != nil || !token.Valid{
 			http.Error(w, "unauthorized", 401)
 			return
 		}
