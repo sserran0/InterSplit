@@ -37,7 +37,12 @@ export default function LoginPage() {
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="min-h-screen flex flex-col items-center justify-center bg-[#3a4863]">
+            <div className="mb-8 text-center">
+                <h1 className="text-3xl font-semibold tracking-tight intersplit-header">
+                    Intersplit
+                </h1>
+            </div>
             <Card className="w-full max-w-sm">
                 <CardHeader>
                     <CardTitle>

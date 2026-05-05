@@ -33,7 +33,7 @@ export default function DashboardPage() {
   return (
     <div className="max-w-lg mx-auto p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-xl font-medium">
+        <h1 className="text-xl font-semibold intersplit-header">
           Welcome, {user?.name}
         </h1>
         <Button

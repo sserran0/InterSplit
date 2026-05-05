@@ -129,7 +129,14 @@
 }
 
 body {
-  margin: 0;
+  font-family: 'Space Grotesk';
+  background-color: #3a4863;
+}
+
+.intersplit-header {
+  font-family: 'Space Grotesk';
+  font-weight: 600;
+
 }
 
 h1,

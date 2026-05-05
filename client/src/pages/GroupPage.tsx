@@ -6,7 +6,7 @@ import { formatCurrency } from '../lib/formatCurrency'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { CURRENCY_CONFIG, getCurrencyFlag, getCurrencyLabel } from '../lib/currencyConfig'
+import { CURRENCY_CONFIG, getCurrencyFlag } from '../lib/currencyConfig'
 import AddExpenseForm from '../components/expenses/AddExpenseForm'
 import api from '../lib/api'
 
@@ -108,7 +108,7 @@ export default function GroupPage() {
   }, 0)
 
   return (
-    <div className="max-w-lg mx-auto p-6">
+    <div className="max-w-5xl mx-auto p-6">
       <div className="mb-6">
         <button className="text-sm text-muted-foreground hover:text-foreground flex items-center gap-1 mb-3"
         onClick={() => navigate('/dashboard')}
@@ -116,11 +116,14 @@ export default function GroupPage() {
             Back To Groups
         </button>
         <div className="flex items-center justify-between mb-1">
-          <h1 className="text-xl font-medium">{groupName} Expenses</h1>
+          <h1 className="text-xl font-semibold intersplit-header">{groupName} Expenses</h1>
         </div>
       </div>
 
-        <div className="mb-6 p-4 border rounded-lg">
+        {/*column*/}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="flex flex-col gap-4">
+            <div className="border rounded-lg p-4">
         <div className="flex justify-between items-center mb-3">
             <p className="font-medium text-sm">Members ({members.length})</p>
             <button
@@ -155,8 +158,7 @@ export default function GroupPage() {
             <Button onClick={addMember}>Add to group</Button>
             </div>
         )}
-
-        <div className="flex flex-col gap-3">
+         <div className="flex flex-col gap-3">
             {members.map((m) => {
             const myShare = expenses.reduce((acc, expense) => {
                 const split = expense.splits?.find(s => s.user_id === m.id)
@@ -213,13 +215,13 @@ export default function GroupPage() {
             })}
         </div>
         </div>
-
-      <AddExpenseForm
-        groupId={id!}
-        members={members}
-        onAdded={fetchAll}
-      />
-
+    </div>
+    <div className="flex flex-col gap-4">
+    <AddExpenseForm
+    groupId={id!}
+    members={members}
+    onAdded={fetchAll}
+    />
       <div className="flex flex-col gap-3 mt-6">
         {expenses.length === 0 && (
             <p className = "text-sm text-muted-foreground">All Square For Now...</p>
@@ -255,6 +257,8 @@ export default function GroupPage() {
           </div>
         ))}
       </div>
+    </div>
+    </div>
     </div>
   )
 }
