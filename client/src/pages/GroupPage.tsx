@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useAuthStore } from '../store/auth'
 import { useCurrency } from '../hooks/useCurrency'
 import { formatCurrency } from '../lib/formatCurrency'
@@ -37,12 +37,17 @@ export default function GroupPage() {
   const [newMemberName, setNewMemberName] = useState('')
   const [newMemberCurrency, setNewMemberCurrency] = useState('USD')
   const [addMemberError, setAddMemberError] = useState('')
+  const [groupName, setGroupName] = useState('')
   const user = useAuthStore((s) => s.user)
   const { convert } = useCurrency()
+  const navigate = useNavigate()
 
   const fetchAll = () => {
     api.get(`/groups/${id}/expenses`).then(({ data }) => setExpenses(data ?? []))
     api.get(`/groups/${id}/members`).then(({ data }) => setMembers(data ?? []))
+    api.get('/groups').then(({data}) => { const group = data?.find((g: any) => g.id === id)
+        if (group) setGroupName(group.name)
+    })
   }
 
   useEffect(() => {
@@ -96,15 +101,14 @@ export default function GroupPage() {
   return (
     <div className="max-w-lg mx-auto p-6">
       <div className="mb-6">
+        <button className="text-sm text-muted-foreground hover:text-foreground flex items-center gap-1 mb-3"
+        onClick={() => navigate('/dashboard')}
+        >
+            Back To Groups
+        </button>
         <div className="flex items-center justify-between mb-1">
-          <h1 className="text-xl font-medium">Group expenses</h1>
-          <Badge variant={myBalance >= 0 ? 'default' : 'destructive'}>
-            {myBalance >= 0 ? '+' : ''}{formatCurrency(myBalance, user?.preferred_currency ?? 'USD')}
-          </Badge>
+          <h1 className="text-xl font-medium">{groupName} Expenses</h1>
         </div>
-        <p className="text-sm text-muted-foreground">
-          {myBalance >= 0 ? 'You are owed' : 'You owe'} in total
-        </p>
       </div>
 
         <div className="mb-6 p-4 border rounded-lg">
