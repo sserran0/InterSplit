@@ -80,6 +80,7 @@ func handleJoinGroup(db *sql.DB) http.HandlerFunc {
 	}
 }
 
+//
 func handleGetGroupMembers(db *sql.DB) http.HandlerFunc {
 	return func ( w http.ResponseWriter, r *http.Request){
 		groupID := chi.URLParam(r, "id")
@@ -111,5 +112,29 @@ func handleGetGroupMembers(db *sql.DB) http.HandlerFunc {
 		}
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(members)
+	}
+}
+func handleAddMember(db *sql.DB) http.HandlerFunc {
+	return func (w http.ResponseWriter, r *http.Request){
+		groupID := chi.URLParam(r, "id")
+
+		var body struct {
+			Email string `json:"email"`
+		}
+		json.NewDecoder(r.Body).Decode(&body)
+
+		var userID string
+		err := db.QueryRow (
+			"SELECT id FROM users WHERE email = $1", body.Email,
+		).Scan(&userID)
+		if err != nil {
+			http.Error(w, "user not found", 404)
+			return
+		}
+		db.Exec(
+			"INSERT INTO group_members (group_id, user_id) VALUES ($1, $2) ON CONFLICT DO NOTHING",
+			group_ID, userID
+		)
+		w.WriteHeader(http.StatusOK)
 	}
 }
