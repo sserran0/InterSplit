@@ -32,6 +32,7 @@ func main() {
 			r.Post("/groups/{id}/members", handleAddMember(db))
 			r.Delete("/groups/{id}/members/{memberID}", handleRemoveMember(db))
             r.Post("/expenses",          handleCreateExpense(db))
+			r.Delete("/expenses/{expenseID}", handleDeleteExpense(db))
             r.Get("/groups/{id}/expenses", handleGetExpenses(db))
             r.Get("/rates",              handleGetRates(db))
 			

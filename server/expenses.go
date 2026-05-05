@@ -48,6 +48,29 @@ func handleCreateExpense(db *sql.DB) http.HandlerFunc {
 		json.NewEncoder(w).Encode(map[string]string{"id": expID})
 	}
 }
+func handleDeleteExpense(db *sql.DB) http.HandlerFunc {
+	return func (w http.ResponseWriter, r *http.Request){
+		expenseID := chi.URLParam(r, "expenseID")
+		userID := r.Context().Value("userID").(string)
+
+		var paidBy string
+		err := db.QueryRow(
+			"SELECT paid_by FROM expenses WHERE id = $1", expenseID,
+		).Scan(&paidBy)
+		if err != nil {
+			http.Error(w, "Expense Not Found!", 404)
+			return
+		}
+		if paidBy != userID{
+			http.Error(w, "Only Payer Can Delete This Expense", 401)
+			return
+		}
+
+		db.Exec("DELETE FROM expenses WHERE id = $1", expenseID)
+		w.WriteHeader(http.StatusOK)
+	}
+
+}
 
 func handleGetExpenses(db *sql.DB) http.HandlerFunc {
 	return func (w http.ResponseWriter, r *http.Request){
@@ -87,7 +110,7 @@ func handleGetExpenses(db *sql.DB) http.HandlerFunc {
 			rows.Scan(&expID, &amount, &currency, &description, &paidBy, &splitUserID, &shareAmount, &isSettled)
 			if _, ok := expenseMap[expID]; !ok {
 				expenseMap[expID] = &Expense{
-					ID: expID, Amount: shareAmount, Currency: currency,
+					ID: expID, Amount: amount, Currency: currency,
 					Description: description, PaidBy: paidBy,
 				}
 				order = append(order, expID)

@@ -80,6 +80,15 @@ export default function GroupPage() {
         alert(err.response?.data || 'Could not resolve member')
     }
   }
+    const deleteExpense = async (expenseID: string) => {
+    try {
+        await api.delete(`/expenses/${expenseID}`)
+        fetchAll()
+    }
+    catch (err: any){
+        alert(err.response?.data || 'Could Not Delete Expense')
+    }
+    }
 
   const myBalance = expenses.reduce((acc, expense) => {
     const myShare = expense.splits?.find((s) => s.user_id === user?.id)
@@ -212,6 +221,9 @@ export default function GroupPage() {
       />
 
       <div className="flex flex-col gap-3 mt-6">
+        {expenses.length === 0 && (
+            <p className = "text-sm text-muted-foreground">All Square For Now...</p>
+        )}
         {expenses.map((expense) => (
           <div key={expense.id} className="border rounded-lg p-4">
             <div className="flex justify-between items-start">
@@ -233,6 +245,11 @@ export default function GroupPage() {
                     )
                   })()}
                 </p>
+                {expense.paid_by === user?.id && (
+                    <button className="text-red-400 text-xs hover:underline mt-1" onClick={() => deleteExpense(expense.id)}>
+                        Delete
+                    </button>
+                )}
               </div>
             </div>
           </div>
