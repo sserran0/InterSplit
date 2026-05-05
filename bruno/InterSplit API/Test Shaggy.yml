@@ -5,12 +5,12 @@ info:
 
 http:
   method: POST
-  url: "{{baseURL}}/auth/api/register"
+  url: "{{baseURL}}/auth/register"
   body:
     type: json
     data: |-
       {
-        "email": "shaggy@test.com",
+        "email": "shaggy1@test.com",
         "name": "Shaggy",
         "password": "test12345",
         "preferred_currency": "MXN"
