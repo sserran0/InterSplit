@@ -14,7 +14,7 @@ export default function App(){
     <BrowserRouter>
     <Routes>
       <Route path="/" element={<LoginPage />}/>
-      <Route path ="/dahsboar" element={<PrivateRoute> <DashboardPage/> </PrivateRoute>}/>
+      <Route path ="/dashboard" element={<PrivateRoute> <DashboardPage/> </PrivateRoute>}/>
       <Route path="/group/:id" element={<PrivateRoute><GroupPage /></PrivateRoute>}/>
       </Routes>
       </BrowserRouter>

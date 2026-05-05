@@ -30,6 +30,7 @@ export default function GroupPage() {
 
   const fetchExpenses = () => {
     api.get(`/groups/${id}/expenses`).then(({ data }) => setExpenses(data ?? []))
+    api.get(`/groups/${id}/members`).then(({ data }) => setMembers(data ?? []))
   }
 
   useEffect(() => {

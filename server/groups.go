@@ -79,3 +79,37 @@ func handleJoinGroup(db *sql.DB) http.HandlerFunc {
 		w.WriteHeader(http.StatusOK)
 	}
 }
+
+func handleGetGroupMembers(db *sql.DB) http.HandlerFunc {
+	return func ( w http.ResponseWriter, r *http.Request){
+		groupID := chi.URLParam(r, "id")
+
+		rows, err := db.Query (
+			`SELECT u.id, u.name, u.preferred_currency 
+			 FROM users u 
+			 JOIN group_members gm ON gm.user_id = u.id
+			 WHERE gm.group_id = $1`, groupID,
+		)
+
+		if err != nil {
+			http.Error(w, "Server error", 500)
+			return
+		}
+		defer rows.Close()
+
+		type Member struct {
+			ID string `json:"id"`
+			Name string `json:"name"`
+			PreferredCurrency string `json:"preferred_currency"`
+		}
+
+		var members []Member
+		for rows.Next() {
+			var m Member 
+			rows.Scan(&m.ID, &m.Name, &m.PreferredCurrency)
+			members = append(members, m)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(members)
+	}
+}
