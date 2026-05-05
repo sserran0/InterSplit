@@ -117,25 +117,43 @@ func handleGetGroupMembers(db *sql.DB) http.HandlerFunc {
 func handleAddMember(db *sql.DB) http.HandlerFunc {
 	return func (w http.ResponseWriter, r *http.Request){
 		groupID := chi.URLParam(r, "id")
+		creatorID := r.Context().Value("userID").(string)
 
 		var body struct {
-			Email string `json:"email"`
+			Name string `json:"name"`
+			PreferredCurrency string `json:"preferred_currency"`
 		}
 		json.NewDecoder(r.Body).Decode(&body)
 
+		if body.Name == "" || len(body.PreferredCurrency) != 3 {
+			http.Error(w, "Name + Currency Required!", 400)
+			return
+		}
+
 		var userID string
 		err := db.QueryRow (
-			"SELECT id FROM users WHERE email = $1", body.Email,
+			`INSERT INTO users (email, name, password_hash, preferred_currency)
+			values ($1, $2, $3, $4) RETURNING id`,body.Name+"guest.instersplit",
+			 body.Name, "guest", body.PreferredCurrency,
 		).Scan(&userID)
+
 		if err != nil {
-			http.Error(w, "user not found", 404)
-			return
+			db.QueryRow(
+				"SELECT id FROM users WHERE email = $1",
+				body.Name+"guest.intersplit",
+			).Scan(&userID)
 		}
 		db.Exec(
 			"INSERT INTO group_members (group_id, user_id) VALUES ($1, $2) ON CONFLICT DO NOTHING",
 			groupID, userID,
 		)
-		w.WriteHeader(http.StatusOK)
+
+		db.Exec(
+			"INSERT INTO group_members (group_id, user_id) VALUES ($1, $2) ON CONFLICT DO NOTHING",
+			groupID, creatorID,
+		)
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(map[string]string{"id": userID, "name": body.Name})
 	}
 }
 

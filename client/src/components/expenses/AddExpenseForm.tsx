@@ -3,6 +3,7 @@ import { useCurrency } from '../../hooks/useCurrency'
 import { formatCurrency, CURRENCIES } from '../../lib/formatCurrency'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { getCurrencyFlag } from '../../lib/currencyConfig'
 import api from '../../lib/api'
 
 
@@ -75,9 +76,11 @@ export default function AddExpenseForm({groupId, members, onAdded}: Props){
             Each person pays:
           </p>
           {members.map((m) => (
-            <div key={m.id} className="flex justify-between text-sm py-1">
+            <div key={m.id} className="flex justify-between items-center text-sm py-1">
               <span>{m.name}</span>
-              <span className="font-medium">
+              <span className="flex items-center gap-1.5">
+                <span>{getCurrencyFlag(m.preferred_currency)}</span>
+                <span>{m.name}</span>
                 {formatCurrency(
                   convert(shareAmount, currency, m.preferred_currency),
                   m.preferred_currency

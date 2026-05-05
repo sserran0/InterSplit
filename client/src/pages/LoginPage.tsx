@@ -4,6 +4,7 @@ import { useAuthStore } from '../store/auth'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { CURRENCY_CONFIG } from '../lib/currencyConfig'
 import api from '../lib/api'
 
 export default function LoginPage() {
@@ -57,8 +58,10 @@ export default function LoginPage() {
                             value={currency}
                             onChange={(e) => setCurrency(e.target.value)}
                             >
-                            {['USD','EUR','GBP','KRW','JPY','MXN','CNY','AUD','BRL'].map(c => (
-                            <option key={c} value={c}>{c}</option>
+                            {Object.entries(CURRENCY_CONFIG).map(([code, {flag, label }]) => (
+                                <option key={code} value={code}>
+                                    {flag} {code} - {label}
+                                </option>
                             ))}
                             </select>
                         )}

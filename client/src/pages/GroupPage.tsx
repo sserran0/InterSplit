@@ -4,9 +4,17 @@ import { useAuthStore } from '../store/auth'
 import { useCurrency } from '../hooks/useCurrency'
 import { formatCurrency } from '../lib/formatCurrency'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { CURRENCY_CONFIG, getCurrencyFlag, getCurrencyLabel } from '../lib/currencyConfig'
 import AddExpenseForm from '../components/expenses/AddExpenseForm'
 import api from '../lib/api'
 
+interface Member {
+    id: string
+    name: string
+    preferred_currency: string
+}
 interface Split {
     user_id: string
     share_amount: number
@@ -24,18 +32,49 @@ interface Expense {
 export default function GroupPage() {
   const { id } = useParams<{ id: string }>()
   const [expenses, setExpenses] = useState<Expense[]>([])
-  const [members, setMembers] = useState<any[]>([])
+  const [members, setMembers] = useState<Member[]>([])
+  const [showAddMember, setShowAddMember] = useState(false)
+  const [newMemberName, setNewMemberName] = useState('')
+  const [newMemberCurrency, setNewMemberCurrency] = useState('USD')
+  const [addMemberError, setAddMemberError] = useState('')
   const user = useAuthStore((s) => s.user)
   const { convert } = useCurrency()
 
-  const fetchExpenses = () => {
+  const fetchAll = () => {
     api.get(`/groups/${id}/expenses`).then(({ data }) => setExpenses(data ?? []))
     api.get(`/groups/${id}/members`).then(({ data }) => setMembers(data ?? []))
   }
 
   useEffect(() => {
-    fetchExpenses()
+    fetchAll()
   }, [id])
+
+  const addMember = async() => {
+    if (!newMemberName.trim()) return
+    try{
+        await api.post(`/groups/${id}/members`, {
+        name: newMemberName,
+        preferred_currency: newMemberCurrency
+        })
+        setNewMemberName('')
+        setNewMemberCurrency('USD')
+        setShowAddMember(false)
+        fetchAll()
+    }
+    catch (err : any){
+        setAddMemberError(err.response?.data || 'Could not add member :(')
+    }
+  }
+
+  const removeMember = async (memberID: string) => {
+    console.log('Removing member:', memberID)
+    try{
+        await api.delete(`/groups/${id}/members/${memberID}`)
+        fetchAll()
+    } catch (err : any){
+        alert(err.response?.data || 'Could not resolve member')
+    }
+  }
 
   const myBalance = expenses.reduce((acc, expense) => {
     const myShare = expense.splits?.find((s) => s.user_id === user?.id)
@@ -68,10 +107,104 @@ export default function GroupPage() {
         </p>
       </div>
 
+        <div className="mb-6 p-4 border rounded-lg">
+        <div className="flex justify-between items-center mb-3">
+            <p className="font-medium text-sm">Members ({members.length})</p>
+            <button
+            className="text-sm text-blue-500 hover:underline flex items-center gap-1"
+            onClick={() => setShowAddMember(!showAddMember)}
+            >
+            {showAddMember ? '✕ Cancel' : '+ Add Member'}
+            </button>
+        </div>
+
+        {showAddMember && (
+            <div className="mb-4 p-3 bg-muted/30 rounded-lg flex flex-col gap-2">
+            <Input
+                placeholder="Name"
+                value={newMemberName}
+                onChange={(e) => setNewMemberName(e.target.value)}
+            />
+            <select
+                className="border rounded px-3 py-2 text-sm"
+                value={newMemberCurrency}
+                onChange={(e) => setNewMemberCurrency(e.target.value)}
+            >
+                {Object.entries(CURRENCY_CONFIG).map(([code, { flag, label }]) => (
+                <option key={code} value={code}>
+                    {flag} {code} — {label}
+                </option>
+                ))}
+            </select>
+            {addMemberError && (
+                <p className="text-red-500 text-xs">{addMemberError}</p>
+            )}
+            <Button onClick={addMember}>Add to group</Button>
+            </div>
+        )}
+
+        <div className="flex flex-col gap-3">
+            {members.map((m) => {
+            const myShare = expenses.reduce((acc, expense) => {
+                const split = expense.splits?.find(s => s.user_id === m.id)
+                if (!split) return acc
+                return acc + convert(split.share_amount, expense.currency, user?.preferred_currency ?? 'USD')
+            }, 0)
+
+            const theirShare = expenses.reduce((acc, expense) => {
+                const split = expense.splits?.find(s => s.user_id === m.id)
+                if (!split) return acc
+                return acc + convert(split.share_amount, expense.currency, m.preferred_currency)
+            }, 0)
+
+            const isCurrentUser = m.id === user?.id
+
+            return (
+                <div key={m.id} className="flex justify-between items-center py-1">
+                <div className="flex items-center gap-2">
+                    <div className="w-7 h-7 rounded-full bg-muted flex items-center justify-center text-xs font-medium">
+                    {m.name.charAt(0).toUpperCase()}
+                    </div>
+                    <div>
+                    <p className="text-sm font-medium">
+                        {m.name} {isCurrentUser && <span className="text-muted-foreground font-normal">(you)</span>}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                        {getCurrencyFlag(m.preferred_currency)} {m.preferred_currency}
+                    </p>
+                    </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                    <div className="text-right">
+                    <p className={`text-sm font-medium ${myShare < 0 ? 'text-red-500' : myShare > 0 ? 'text-green-600' : ''}`}>
+                        {myShare === 0 ? '—' : `${myShare > 0 ? '+' : ''}${formatCurrency(myShare, user?.preferred_currency ?? 'USD')}`}
+                    </p>
+                    {m.preferred_currency !== user?.preferred_currency && (
+                        <p className="text-xs text-muted-foreground">
+                        {formatCurrency(theirShare, m.preferred_currency)}
+                        </p>
+                    )}
+                    </div>
+                    {!isCurrentUser && (
+                    <button
+                        className="text-red-400 text-xs hover:underline ml-2"
+                        onClick={() => removeMember(m.id)}
+                    >
+                        Remove
+                    </button>
+                    )}
+                </div>
+                </div>
+            )
+            })}
+        </div>
+        </div>
+
       <AddExpenseForm
         groupId={id!}
         members={members}
-        onAdded={fetchExpenses}
+        onAdded={fetchAll}
       />
 
       <div className="flex flex-col gap-3 mt-6">
