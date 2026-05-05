@@ -54,15 +54,17 @@ export default function AddExpenseForm({groupId, members, onAdded}: Props){
 
       <div className="flex gap-2">
         <Input
-          placeholder="Amount"
-          type="number"
+          placeholder="0.00"
+          min="0"
+          step="any"
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
         />
         <select
-          className="border rounded px-3 py-2 text-sm"
+        className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
           value={currency}
           onChange={(e) => setCurrency(e.target.value)}
+          
         >
           {CURRENCIES.map((c) => (
             <option key={c} value={c}>{c}</option>
@@ -91,7 +93,7 @@ export default function AddExpenseForm({groupId, members, onAdded}: Props){
         </div>
       )}
 
-      <Button onClick={handleSubmit}>Add expense</Button>
+      <Button onClick={handleSubmit}>Add Expense</Button>
     </div>
   )
 }
