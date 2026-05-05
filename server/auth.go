@@ -88,7 +88,7 @@ func handleLogin(db *sql.DB) http.HandlerFunc{
 
 		req.Email = strings.TrimSpace(strings.ToLower(req.Email))
 		if req.Email == "" || req.Password == ""{
-			http.Error(w, "Email and Password as required!", 400)
+			http.Error(w, "Email and Password is required!", 400)
 			return
 		}
 

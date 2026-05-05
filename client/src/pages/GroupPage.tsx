@@ -108,9 +108,9 @@ export default function GroupPage() {
   }, 0)
 
   return (
-    <div className="max-w-5xl mx-auto p-6">
+    <div className="w-full px-8 py-6">
       <div className="mb-6">
-        <button className="text-sm text-muted-foreground hover:text-foreground flex items-center gap-1 mb-3"
+        <button className="cursor-pointer text-sm hover:text-gray-500 transition-colors duration-200 flex items-center gap-1 mb-3"
         onClick={() => navigate('/dashboard')}
         >
             Back To Groups
@@ -127,7 +127,7 @@ export default function GroupPage() {
         <div className="flex justify-between items-center mb-3">
             <p className="font-medium text-sm">Members ({members.length})</p>
             <button
-            className="text-sm text-blue-500 hover:underline flex items-center gap-1"
+            className="cursor-pointer text-sm text-blue-500 hover:underline hover:text-muted-foreground transition-colors duration-200 flex items-center gap-1"
             onClick={() => setShowAddMember(!showAddMember)}
             >
             {showAddMember ? '✕ Cancel' : '+ Add Member'}
@@ -135,14 +135,15 @@ export default function GroupPage() {
         </div>
 
         {showAddMember && (
-            <div className="mb-4 p-3 bg-muted/30 rounded-lg flex flex-col gap-2">
+            <div className="mb-4 p-3 rounded-lg flex flex-col gap-2">
             <Input
                 placeholder="Name"
+                className="placeholder:text-gray"
                 value={newMemberName}
                 onChange={(e) => setNewMemberName(e.target.value)}
             />
             <select
-                className="border rounded px-3 py-2 text-sm"
+                className="cursor-pointer border rounded px-3 py-2 text-sm"
                 value={newMemberCurrency}
                 onChange={(e) => setNewMemberCurrency(e.target.value)}
             >
@@ -155,7 +156,7 @@ export default function GroupPage() {
             {addMemberError && (
                 <p className="text-red-500 text-xs">{addMemberError}</p>
             )}
-            <Button onClick={addMember}>Add to group</Button>
+            <Button onClick={addMember}  className="cursor-pointer transition-colors duration-200 hover:bg-blue-600">Add to group</Button>
             </div>
         )}
          <div className="flex flex-col gap-3">
@@ -177,7 +178,7 @@ export default function GroupPage() {
             return (
                 <div key={m.id} className="flex justify-between items-center py-1">
                 <div className="flex items-center gap-2">
-                    <div className="w-7 h-7 rounded-full bg-muted flex items-center justify-center text-xs font-medium">
+                    <div className="w-7 h-7 rounded-full bg-white flex items-center justify-center text-xs text-black font-medium">
                     {m.name.charAt(0).toUpperCase()}
                     </div>
                     <div>
@@ -203,7 +204,7 @@ export default function GroupPage() {
                     </div>
                     {!isCurrentUser && (
                     <button
-                        className="text-red-400 text-xs hover:underline ml-2"
+                        className="cursor-pointer text-red-400 text-xs transition-colors duration-200 hover:underline hover:text-muted-foreground  ml-2"
                         onClick={() => removeMember(m.id)}
                     >
                         Remove
@@ -224,20 +225,20 @@ export default function GroupPage() {
     />
       <div className="flex flex-col gap-3 mt-6">
         {expenses.length === 0 && (
-            <p className = "text-sm text-muted-foreground">All Square For Now...</p>
+            <p className = "text-muted-foreground">All Square For Now...</p>
         )}
         {expenses.map((expense) => (
           <div key={expense.id} className="border rounded-lg p-4">
             <div className="flex justify-between items-start">
               <div>
-                <p className="font-medium">{expense.description}</p>
-                <p className="text-sm text-muted-foreground">
+                <p className="font-medium text-white">{expense.description}</p>
+                <p className="text-sm text-white-500">
                   {formatCurrency(expense.amount, expense.currency)}
                 </p>
               </div>
-              <div className="text-right">
-                <p className="text-sm font-medium">Your share</p>
-                <p className="text-sm text-muted-foreground">
+              <div className="text-right text-white">
+                <p className="text-sm font-medium text-white">Your share</p>
+                <p className="text-sm">
                   {(() => {
                     const myShare = expense.splits?.find(s => s.user_id === user?.id)
                     if (!myShare) return '—'
@@ -248,7 +249,7 @@ export default function GroupPage() {
                   })()}
                 </p>
                 {expense.paid_by === user?.id && (
-                    <button className="text-red-400 text-xs hover:underline mt-1" onClick={() => deleteExpense(expense.id)}>
+                    <button className="cursor-pointer text-red-400 text-xs transition-colors duration-200 hover:text-muted-foreground hover:underline mt-1" onClick={() => deleteExpense(expense.id)}>
                         Delete
                     </button>
                 )}

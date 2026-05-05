@@ -189,6 +189,28 @@ func handleRemoveMember(db *sql.DB) http.HandlerFunc{
 			"DELETE FROM group_members WHERE group_id = $1 AND user_id = $2",
 			groupID, memberID,
 		)
+
+		db.Exec(
+			"DELETE FROM users WHERE id = $1 AND password_hash = 'guest'", memberID,
+		)
+		w.WriteHeader(http.StatusOK)
+	}
+}
+
+func handleDeleteGroup(db *sql.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request){
+		groupID := chi.URLParam(r, "id")
+
+		var createdBy string
+		err := db.QueryRow(
+			"SELECT created_by FROM groups WHERE id = $1", groupID,
+		).Scan(&createdBy)
+
+		if err != nil {
+			http.Error(w, "Group Not Found", 404)
+		}
+
+		db.Exec("DELETE FROM groups WHERE id=$1", groupID)
 		w.WriteHeader(http.StatusOK)
 	}
 }

@@ -121,8 +121,7 @@
   max-width: 100%;
   margin: 0 auto;
   text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
@@ -130,13 +129,22 @@
 
 body {
   font-family: 'Space Grotesk';
-  background-color: #3a4863;
+  background-color: black;
+  color: white;
 }
 
 .intersplit-header {
   font-family: 'Space Grotesk';
   font-weight: 600;
 
+}
+input {
+  color: white;
+  caret-color: white
+}
+#login{
+  color: black;
+  caret-color: black;
 }
 
 h1,

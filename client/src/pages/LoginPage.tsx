@@ -37,7 +37,7 @@ export default function LoginPage() {
     }
 
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center bg-[#3a4863]">
+        <div className="min-h-screen flex flex-col items-center justify-center">
             <div className="mb-8 text-center">
                 <h1 className="text-3xl font-semibold tracking-tight intersplit-header">
                     Intersplit
@@ -45,21 +45,20 @@ export default function LoginPage() {
             </div>
             <Card className="w-full max-w-sm">
                 <CardHeader>
-                    <CardTitle>
+                    <CardTitle className="intersplit-header">
                         {isRegister ? 'Create Account': 'Sign In'} - InterSplit
                     </CardTitle>
                 </CardHeader>
                 <CardContent className="flex flex-col gap-3">
                     {isRegister && (
                         <>
-                        <Input placeholder="Name" value={name} onChange={(e) => setName(e.target.value)}/>
-                        </>)}
-                        <Input placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)}/>
-                        <Input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)}/>
+                        <Input id="login" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)}/></>)}
+                        <Input id="login" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)}/>
+                        <Input id="login" type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)}/>
                         
                         {isRegister && (
                             <select 
-                            className="border rounded px-3 py-2 text-sm"
+                            className="border rounded px-3 py-2 text-sm cursor-pointer"
                             value={currency}
                             onChange={(e) => setCurrency(e.target.value)}
                             >
@@ -71,11 +70,11 @@ export default function LoginPage() {
                             </select>
                         )}
                         {error && <p className="text-red-500 text-sm">{error}</p>}
-                        <Button onClick={handleSubmit}>
+                        <Button onClick={handleSubmit} className="cursor-pointer transition-colors duration-200 hover: border-solid-transparent hover:bg-white hover:text-black">
                             {isRegister ? 'Create an Account' : 'Sign in'}
                         </Button>
                         <button
-                        className="text-sm text-muted-foreground"
+                        className="text-sm text-muted-foreground transition-colors duration-200 hover:underline hover:text-blue-500 cursor-pointer"
                         onClick={() => setIsRegister(!isRegister)}
                         >
                             {isRegister ? 'Already have an account? Sign in' : "Don't have an account? Create One"}

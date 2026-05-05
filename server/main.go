@@ -27,6 +27,7 @@ func main() {
             r.Use(jwtMiddleware)  // protected routes
             r.Get("/groups",             handleGetGroups(db))
             r.Post("/groups",            handleCreateGroup(db))
+			r.Delete("/groups/{id}", handleDeleteGroup(db))
             r.Post("/groups/{id}/join",  handleJoinGroup(db))
 			r.Get("/groups/{id}/members", handleGetGroupMembers(db))
 			r.Post("/groups/{id}/members", handleAddMember(db))

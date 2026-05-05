@@ -43,11 +43,13 @@ export default function AddExpenseForm({groupId, members, onAdded}: Props){
   }
 
   return (
-    <div className="flex flex-col gap-3 p-4 border rounded-lg bg-muted/30">
-      <p className="font-medium text-sm">Add an expense</p>
+    <div className="flex flex-col gap-3 p-4 border rounded-lg ">
+      <p className="font-medium text-sm text-white">Add an expense</p>
 
       <Input
+        type="text"
         placeholder="Description e.g. Dinner"
+        className="placeholder: text-white-500"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
       />
@@ -55,13 +57,14 @@ export default function AddExpenseForm({groupId, members, onAdded}: Props){
       <div className="flex gap-2">
         <Input
           placeholder="0.00"
+          className="placeholder: text-white-500 text: text-white"
           min="0"
           step="any"
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
         />
         <select
-        className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+        className="cursor-pointer [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
           value={currency}
           onChange={(e) => setCurrency(e.target.value)}
           
@@ -73,8 +76,8 @@ export default function AddExpenseForm({groupId, members, onAdded}: Props){
       </div>
 
       {shareAmount > 0 && members.length > 0 && (
-        <div className="bg-background border rounded p-3">
-          <p className="text-xs font-medium text-muted-foreground mb-2">
+        <div className=" border rounded p-3">
+          <p className="text-xs font-medium mb-2">
             Each person pays:
           </p>
           {members.map((m) => (
@@ -82,7 +85,7 @@ export default function AddExpenseForm({groupId, members, onAdded}: Props){
               <span>{m.name}</span>
               <span className="flex items-center gap-1.5">
                 <span>{getCurrencyFlag(m.preferred_currency)}</span>
-                <span>{m.name}</span>
+                {/* <span>{m.name}</span> */}
                 {formatCurrency(
                   convert(shareAmount, currency, m.preferred_currency),
                   m.preferred_currency
@@ -93,7 +96,7 @@ export default function AddExpenseForm({groupId, members, onAdded}: Props){
         </div>
       )}
 
-      <Button onClick={handleSubmit}>Add Expense</Button>
+      <Button onClick={handleSubmit} className="cursor-pointer transition-colors duration-200 hover:bg-blue-500">Add Expense</Button>
     </div>
   )
 }

@@ -4,6 +4,7 @@ import { useAuthStore } from "../store/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
+import { Trash2 } from "lucide-react";
 import api from '../lib/api'
 
 interface Group {
@@ -18,6 +19,7 @@ export default function DashboardPage() {
     const user = useAuthStore((s) => s.user)
     const logout = useAuthStore((s) => s.logout)
     const navigate = useNavigate()
+    const [confirmDeleteID, setConfirmDeleteID] = useState<string | null>(null)
 
     useEffect(() => {
         api.get('/groups').then(({data}) => setGroups(data ?? []))
@@ -29,9 +31,18 @@ export default function DashboardPage() {
     setGroups((prev) => [...prev, { id: data.id, name: groupName }])
     setGroupName('')
   }
-
+    const deleteGroup = async (groupId: string) => {
+        try{
+        await api.delete(`/groups/${groupId}`)
+        setGroups((prev) => prev.filter((g) => g.id !== groupId))
+        setConfirmDeleteID(null)
+    }
+    catch (err: any){
+        alert(err.response?.data || 'Could not delete group. Please try again.')
+    }
+}
   return (
-    <div className="max-w-lg mx-auto p-6">
+    <div className="w-full px-8 py-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-xl font-semibold intersplit-header">
           Welcome, {user?.name}
@@ -39,19 +50,22 @@ export default function DashboardPage() {
         <Button
           variant="outline"
           onClick={() => { logout(); navigate('/') }}
+          className="cursor-pointer text-white bg-[#2a2b2b] transition-colors duration-200 hover:bg-red-500 hover:text-white"
         >
           Sign out
         </Button>
       </div>
 
-      <div className="flex gap-2 mb-6">
+      <div className="flex ml-45 w-150 gap-2 mb-6">
         <Input
           placeholder="New group name e.g. Seoul Trip"
           value={groupName}
           onChange={(e) => setGroupName(e.target.value)}
         />
-        <Button onClick={createGroup}>Create</Button>
+        <Button onClick={createGroup} className="cursor-pointer bg-[#2a2b2b] transition-colors duration-200 hover:bg-blue-500">Create</Button>
       </div>
+
+      <h2 className="text-left intersplit-header">Your Trips:</h2>
 
       <div className="flex flex-col gap-3">
         {groups.length === 0 && (
@@ -60,15 +74,39 @@ export default function DashboardPage() {
           </p>
         )}
         {groups.map((g) => (
+            <div key={g.id} className="flex items-center gap-2">
           <Card
-            key={g.id}
-            className="cursor-pointer hover:bg-muted transition-colors"
+            className="flex-1 text-left cursor-pointer transition-colors duration-200 hover:text-white hover:bg-gray-500"
             onClick={() => navigate(`/group/${g.id}`)}
           >
             <CardContent className="p-4">
               <p className="font-medium">{g.name}</p>
             </CardContent>
           </Card>
+
+          {confirmDeleteID === g.id ? (
+            <div className="flex items-center gap-2 text-sm">
+            <span className="text-white/70">Are You Sure?</span>
+            <button className="cursor-pointer text-white transition-colors duration-200 hover:underline hover:text-green-500"
+            onClick={() => deleteGroup(g.id)}
+            >
+                Yes
+            </button>
+            <button className="cursor-pointer text-white transition-colors duration-200 hover:underline hover:text-red-500"
+            onClick={() => setConfirmDeleteID(null)}
+            >
+                No
+            </button>
+            </div>
+          ) : (
+            <button
+                className="cursor-pointer text-white transition-colors duration-200 hover:underline hover:text-red-500 p-2"
+                    onClick={() => setConfirmDeleteID(g.id)}
+                    >
+                    <Trash2 size={16}/>
+            </button>
+          )}
+          </div>
         ))}
       </div>
     </div>
