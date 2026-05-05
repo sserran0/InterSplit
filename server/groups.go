@@ -133,7 +133,43 @@ func handleAddMember(db *sql.DB) http.HandlerFunc {
 		}
 		db.Exec(
 			"INSERT INTO group_members (group_id, user_id) VALUES ($1, $2) ON CONFLICT DO NOTHING",
-			group_ID, userID
+			groupID, userID,
+		)
+		w.WriteHeader(http.StatusOK)
+	}
+}
+
+func handleRemoveMember(db *sql.DB) http.HandlerFunc{
+	return func (w http.ResponseWriter, r *http.Request){
+		groupID := chi.URLParam(r,"id")
+		memberID := chi.URLParam(r, "memberID")
+		callerID := r.Context().Value("userID").(string)
+		
+		//deny removal if group only has one member (you)
+		var count int 
+		db.QueryRow(
+			"SELECT COUNT(*) FROM group_members WHERE group_id = $1", groupID,
+		).Scan(&count)
+		if count <= 1{
+			http.Error(w, "Group Must Have At Least One Member!", 400)
+			return
+		}
+
+		//only allow self removal if you create group
+		if memberID != callerID {
+			var createdBy string
+			db.QueryRow(
+				"SELECT created_by FROM groups WHERE id = $1", groupID,
+			).Scan(&createdBy)
+			if createdBy != callerID{
+				http.Error(w, "Unauthorized!", 401)
+				return
+			}
+		}
+		//member removal
+		db.Exec(
+			"DELETE FROM group_members WHERE group_id = $1 AND user_id = $2",
+			groupID, memberID,
 		)
 		w.WriteHeader(http.StatusOK)
 	}

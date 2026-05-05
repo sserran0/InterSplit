@@ -29,9 +29,12 @@ func main() {
             r.Post("/groups",            handleCreateGroup(db))
             r.Post("/groups/{id}/join",  handleJoinGroup(db))
 			r.Get("/groups/{id}/members", handleGetGroupMembers(db))
+			r.Post("/groups/{id}/members", handleAddMember(db))
+			r.Delete("/groups/{id}/members/{memberID}", handleAddMember(db))
             r.Post("/expenses",          handleCreateExpense(db))
             r.Get("/groups/{id}/expenses", handleGetExpenses(db))
             r.Get("/rates",              handleGetRates(db))
+			
         })
     })
 	port := os.Getenv("PORT")
