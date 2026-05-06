@@ -92,9 +92,9 @@ server/                   Go backend
 
 ### Prerequisites
 
-Go 1.22+
-Node 20+
-PostgreSQL 15+
+- Go 1.22+
+- Node 20+
+- PostgreSQL 15+
 
 #### 1. Clone the repository
 ```
