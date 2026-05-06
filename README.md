@@ -77,6 +77,7 @@ server/                   Go backend
 
 ### Login:
 <img width="1470" height="801" alt="image" src="https://github.com/user-attachments/assets/8dbb8b53-bb7c-475f-8116-f48729b85c92" />
+<br>
 ### Dashboard:
 <img width="1470" height="801" alt="image" src="https://github.com/user-attachments/assets/81024871-8938-4efa-bde8-39367cf94adf" />
 
@@ -147,5 +148,18 @@ npm run dev
 | SGD | Singapore Dollar | Singapore |
  
 ---
+
+## What I Learned
+
+This project was my first time building a full-stack application from scratch without a framework doing the heavy lifting, and a number of things stuck with me from the experience.
+ 
+**Go as a backend language** was a deliberate choice and a rewarding one. I've been meaning to learn Go for a while and this was a straightforward project to ease into it. Writing the JWT middleware, understanding how Go handles interfaces, and structuring the router with Chi gave me a much clearer picture of how HTTP servers actually work at the layer just above raw sockets.
+**The multi-currency conversion architecture** — storing all rates relative to a single base currency (USD) and doing two-step conversions — is a pattern used in production finance systems. Implementing it from scratch made the math concrete in a way that reading about it would not have.
+ 
+**Frontend state management** with Zustand was significantly simpler than Redux for this scale of application. The decision to put exchange rates in a global Zustand store rather than component-level state meant rates were fetched once and shared everywhere, avoiding redundant API calls and keeping the currency conversion hook simple.
+ 
+**Security fundamentals in practice** — bcrypt cost factors, JWT expiration, parameterized queries preventing SQL injection, environment variables for secrets, and CORS configuration — were things I had studied in my Systems Security course but applying them in a real project made their purpose concrete rather than theoretical.
+
+
 
 
