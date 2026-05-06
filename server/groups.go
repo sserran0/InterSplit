@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"net/http"
+	"strings"
 
 	"github.com/go-chi/chi/v5"
 )
@@ -80,7 +81,7 @@ func handleJoinGroup(db *sql.DB) http.HandlerFunc {
 	}
 }
 
-//
+//get members
 func handleGetGroupMembers(db *sql.DB) http.HandlerFunc {
 	return func ( w http.ResponseWriter, r *http.Request){
 		groupID := chi.URLParam(r, "id")
@@ -129,18 +130,19 @@ func handleAddMember(db *sql.DB) http.HandlerFunc {
 			http.Error(w, "Name + Currency Required!", 400)
 			return
 		}
+		guestEmail := strings.ToLower(body.Name) + "@" + groupID[:8] + ".guest.intersplit"
 
 		var userID string
 		err := db.QueryRow (
 			`INSERT INTO users (email, name, password_hash, preferred_currency)
-			values ($1, $2, $3, $4) RETURNING id`,body.Name+"guest.instersplit",
-			 body.Name, "guest", body.PreferredCurrency,
+			values ($1, $2, $3, $4) RETURNING id`,
+			guestEmail, body.Name, "guest", body.PreferredCurrency,
 		).Scan(&userID)
 
 		if err != nil {
 			db.QueryRow(
 				"SELECT id FROM users WHERE email = $1",
-				body.Name+"guest.intersplit",
+				guestEmail,
 			).Scan(&userID)
 		}
 		db.Exec(
