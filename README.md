@@ -77,15 +77,17 @@ server/                   Go backend
 ### Login:
 <img width="1470" height="801" alt="image" src="https://github.com/user-attachments/assets/8dbb8b53-bb7c-475f-8116-f48729b85c92" />
 
---
+
 ### Dashboard:
 <img width="1470" height="801" alt="image" src="https://github.com/user-attachments/assets/81024871-8938-4efa-bde8-39367cf94adf" />
 
---
-### Expense Page
-<img width="1470" height="800" alt="image" src="https://github.com/user-attachments/assets/6550c11b-25f8-48ec-9c1c-92f7af11973b" />
 
---
+### Expense Page
+<img width="1470" height="801" alt="image" src="https://github.com/user-attachments/assets/d11dc438-8413-4212-8b24-17edff3faac2" />
+
+### Expense Splits
+<img width="527" height="586" alt="image" src="https://github.com/user-attachments/assets/0fc9d52f-042b-4d63-a92a-8123645f9804" />
+
 
 ## How to Run
 
