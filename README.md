@@ -64,7 +64,7 @@ server/                   Go backend
   ```
 
   ## Database Schema
-  `
+  ```
   users           id, email, name, password_hash, preferred_currency
   groups          id, name, created_by
   group_members   group_id, user_id
@@ -72,7 +72,7 @@ server/                   Go backend
   expense_splits  id, expense_id, user_id, share_amount, is_settled
   exchange_rates  base_currency, target_currency, rate, fetched_at
   migrations_run  filename, applied_at
-`
+```
 ## How to Run
 
 ### Prerequisites
@@ -82,28 +82,37 @@ Node 20+
 PostgreSQL 15+
 
 #### 1. Clone the repository
-`bashgit clone https://github.com/sserran0/InterSplit.git
+```
+bashgit clone https://github.com/sserran0/InterSplit.git
 cd InterSplit
-2. Set up the database
+```
+#### 2. Set up the database
+```
 bashpsql postgres
 CREATE DATABASE inter_split_dev;
 CREATE USER intersplit_user WITH PASSWORD 'yourpassword';
 GRANT ALL PRIVILEGES ON DATABASE inter_split_dev TO intersplit_user;`
 \q
+```
 #### 3. Configure the backend
-`Create server/.env:
+```
+Create server/.env:
 DATABASE_URL=postgres://intersplit_user:yourpassword@localhost:5432/inter_split_dev?sslmode=disable
 PORT=8080
 JWT_SECRET=your-secret-key-here
-FRONTEND_URL=http://localhost:5173`
+FRONTEND_URL=http://localhost:5173
+```
 #### 4. Run the backend
-`bashcd server
+```
+bashcd server
 go mod tidy
 go run .`
 #### 5. Run the front end
-`
+```
+#### 5. Run the front end
+```
 cd client
 npm install
 npm run dev
-`
+```
 
