@@ -116,3 +116,33 @@ npm install
 npm run dev
 ```
 
+## Supported Currencies
+ 
+| Code | Currency | Region |
+|------|----------|--------|
+| USD | US Dollar | United States |
+| EUR | Euro | European Union |
+| GBP | British Pound | United Kingdom |
+| KRW | Korean Won | South Korea |
+| JPY | Japanese Yen | Japan |
+| MXN | Mexican Peso | Mexico |
+| CNY | Chinese Yuan | China |
+| AUD | Australian Dollar | Australia |
+| CAD | Canadian Dollar | Canada |
+| BRL | Brazilian Real | Brazil |
+| INR | Indian Rupee | India |
+| THB | Thai Baht | Thailand |
+| VND | Vietnamese Dong | Vietnam |
+| SGD | Singapore Dollar | Singapore |
+ 
+---
+## Demo:
+
+### Login:
+<img width="1470" height="801" alt="image" src="https://github.com/user-attachments/assets/8dbb8b53-bb7c-475f-8116-f48729b85c92" />
+### Dashboard:
+<img width="1470" height="801" alt="image" src="https://github.com/user-attachments/assets/81024871-8938-4efa-bde8-39367cf94adf" />
+
+### Expense Page
+<img width="1470" height="800" alt="image" src="https://github.com/user-attachments/assets/6550c11b-25f8-48ec-9c1c-92f7af11973b" />
+
