@@ -76,7 +76,7 @@ export default function DashboardPage() {
         {groups.map((g) => (
             <div key={g.id} className="flex items-center gap-2">
           <Card
-            className="flex-1 text-left cursor-pointer transition-colors duration-200 hover:text-white hover:bg-gray-500"
+            className="flex-1 bg-[#2a2b2b] text-left text-white cursor-pointer transition-colors duration-200 hover:text-black hover:bg-white"
             onClick={() => navigate(`/group/${g.id}`)}
           >
             <CardContent className="p-4">

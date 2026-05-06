@@ -110,10 +110,10 @@ export default function GroupPage() {
   return (
     <div className="w-full px-8 py-6">
       <div className="mb-6">
-        <button className="cursor-pointer text-sm hover:text-gray-500 transition-colors duration-200 flex items-center gap-1 mb-3"
+        <button className="cursor-pointer text-sm hover:text-gray-500 transition-colors duration-200 hover: underline  flex items-center gap-1 mb-3"
         onClick={() => navigate('/dashboard')}
         >
-            Back To Groups
+        ← Back To Groups
         </button>
         <div className="flex items-center justify-between mb-1">
           <h1 className="text-xl font-semibold intersplit-header">{groupName} Expenses</h1>

@@ -59,6 +59,7 @@ export default function AddExpenseForm({groupId, members, onAdded}: Props){
           placeholder="0.00"
           className="placeholder: text-white-500 text: text-white"
           min="0"
+          inputMode='decimal'
           step="any"
           value={amount}
           onChange={(e) => setAmount(e.target.value)}

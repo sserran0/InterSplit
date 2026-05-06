@@ -42,23 +42,24 @@ export default function LoginPage() {
                 <h1 className="text-3xl font-semibold tracking-tight intersplit-header">
                     Intersplit
                 </h1>
+                <p className="text-gray-500">Expense Splitting, Made Global</p>
             </div>
-            <Card className="w-full max-w-sm">
+            <Card className="w-full max-w-sm bg-[#2a2b2b]">
                 <CardHeader>
-                    <CardTitle className="intersplit-header">
+                    <CardTitle className="intersplit-header text-white">
                         {isRegister ? 'Create Account': 'Sign In'} - InterSplit
                     </CardTitle>
                 </CardHeader>
                 <CardContent className="flex flex-col gap-3">
                     {isRegister && (
                         <>
-                        <Input id="login" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)}/></>)}
-                        <Input id="login" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)}/>
-                        <Input id="login" type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)}/>
+                        <Input  placeholder="Name" value={name} onChange={(e) => setName(e.target.value)}/></>)}
+                        <Input  placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)}/>
+                        <Input  type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)}/>
                         
                         {isRegister && (
                             <select 
-                            className="border rounded px-3 py-2 text-sm cursor-pointer"
+                            className="border border-white rounded px-3 py-2 text-sm text-white cursor-pointer"
                             value={currency}
                             onChange={(e) => setCurrency(e.target.value)}
                             >
