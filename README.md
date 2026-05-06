@@ -27,8 +27,7 @@ Intersplit solves this by letting each person see their share of any expense aut
 - Tailwind CSS v4 for styling
 - shadcn/ui for component primitives
 - Zustand for global state management with localStorage persistence
-- Axios for API communication with automatic JWT injection via interceptors
-- Framer Motion for UI animations
+- Axios for API communication with automatic JWT injection 
 - Lucide React for icons
 
 ### Backend
