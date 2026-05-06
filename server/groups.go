@@ -191,7 +191,7 @@ func handleRemoveMember(db *sql.DB) http.HandlerFunc{
 		)
 
 		db.Exec(
-			"DELETE FROM users WHERE id = $1 AND password_hash = 'guest'", memberID,
+			"DELETE FROM users WHERE id = $1", memberID,
 		)
 		w.WriteHeader(http.StatusOK)
 	}

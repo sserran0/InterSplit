@@ -65,7 +65,7 @@ export default function DashboardPage() {
         <Button onClick={createGroup} className="cursor-pointer bg-[#2a2b2b] transition-colors duration-200 hover:bg-blue-500">Create</Button>
       </div>
 
-      <h2 className="text-left intersplit-header">Your Trips:</h2>
+      <h2 className="text-left intersplit-header">Your Groups:</h2>
 
       <div className="flex flex-col gap-3">
         {groups.length === 0 && (
