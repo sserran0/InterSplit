@@ -123,7 +123,6 @@ FRONTEND_URL=http://localhost:5173
 bashcd server
 go mod tidy
 go run .`
-#### 5. Run the front end
 ```
 #### 5. Run the front end
 ```
